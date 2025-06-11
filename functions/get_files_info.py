@@ -4,13 +4,19 @@ from typing import Optional
 def get_files_info(working_directory: str, directory: Optional[str] = None) -> str:
     if directory is None:
         directory = "."
-    if directory.startswith("/") or directory.startswith("../"):
-        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
+    # if directory.startswith("/") or ".." in directory:
+    #     return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
     try:
-        working_directory = os.path.abspath(working_directory)
+        working_directory_abs = os.path.abspath(working_directory)
     except Exception as e:
-        return f"Error: Could not get working directory. {e}"
-    path = os.path.join(working_directory, directory)
+        return f'Error: Could not resolve working directory "{working_directory}". {e}'
+    try:
+        path = os.path.abspath(os.path.join(working_directory, directory))
+    except Exception as e:
+        return f'Error: Could not resolve "{directory}"'
+    print(path)
+    if not path.startswith(working_directory_abs):
+        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
 
     if not os.path.isdir(path):
         return f'Error: "{path}" is not a directory'
