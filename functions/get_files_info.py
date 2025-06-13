@@ -14,7 +14,7 @@ def get_files_info(working_directory: str, directory: Optional[str] = None) -> s
         path = os.path.abspath(os.path.join(working_directory, directory))
     except Exception as e:
         return f'Error: Could not resolve "{directory}"'
-    print(path)
+    # print(path)
     if not path.startswith(working_directory_abs):
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
 
